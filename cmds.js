@@ -50,7 +50,7 @@ exports.showCmd = (rl, id) => {
         errorlog(`Falta el parámetro id.`);
     } else {
         try {
-            const quiz = model.getByIndex(id);
+            const  quiz = model.getByIndex(id);
             log(` [${colorize(id, 'magenta')}]:  ${quiz.question} ${colorize('=>', 'magenta')} ${quiz.answer}`);
         } catch(error) {
             errorlog(error.message);
@@ -75,7 +75,7 @@ exports.addCmd = rl => {
 
     rl.question(colorize(' Introduzca una pregunta: ', 'red'), question => {
 
-        rl.question(colorize(' Introduzca la respuesta ', 'red'), answer => {
+        rl.question(colorize(' Introduzca la respuesta: ', 'red'), answer => {
 
             model.add(question, answer);
             log(` ${colorize('Se ha añadido', 'magenta')}: ${question} ${colorize('=>', 'magenta')} ${answer}`);
@@ -151,8 +151,28 @@ exports.editCmd = (rl, id) => {
  * @param id Clave del quiz a probar.
  */
 exports.testCmd = (rl, id) => {
-    log('Probar el quiz indicado.', 'red');
-    rl.prompt();
+    if (typeof id === "undefined") {
+        errorlog(`Falta el parámetro id.`);
+        rl.prompt();
+    }else{
+        try {
+            const quiz = model.getByIndex(id);
+
+            rl.question(colorize(`${quiz.question}?  `, 'red'), respuesta => {
+                if (respuesta.trim().toLowerCase() == quiz.answer.toLowerCase()) {
+                    log("Su respuesta es:");
+                    biglog('CORRECTA', 'green');
+                } else {
+                    log("Su respuesta es:");
+                    biglog('INCORRECTA', 'red');
+                }
+                rl.prompt();
+            });
+        }catch (error) {
+            errorlog(error.message);
+            rl.prompt();
+        }
+    }
 };
 
 
@@ -174,9 +194,8 @@ exports.playCmd = rl => {
  * @param rl Objeto readline usado para implementar el CLI.
  */
 exports.creditsCmd = rl => {
-    log('Autores de la práctica:');
-    log('Nombre 1', 'green');
-    log('Nombre 2', 'green');
+    log('Autoe de la práctica:');
+    log('Rodrigo Lopez', 'green');
     rl.prompt();
 };
 
