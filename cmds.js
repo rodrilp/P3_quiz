@@ -195,7 +195,7 @@ exports.playCmd = rl => {
  */
 exports.creditsCmd = rl => {
     log('Autoe de la práctica:');
-    log('Rodrigo Lopez', 'green');
+    log('Rodrigo Lopez Puente', 'green');
     rl.prompt();
 };
 
